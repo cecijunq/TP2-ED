@@ -31,8 +31,6 @@ int main() {
     }
 
     Sort s(grafo);
-    //grafo->imprime_vizinhos();
-    //std::cout << std::endl;
     Coloracao c;
     int resultado_coloracao = c.checa_condicao_vizinhos(grafo);
 
@@ -85,5 +83,7 @@ int main() {
         std::cout << "1 ";
         grafo->imprime_vizinhos();
     }
+
+    //grafo.Limpa();
 
 }

@@ -32,7 +32,7 @@ void Grafo::insere_aresta(int v1, int v2) {
 
 void Grafo::imprime_vizinhos() {
     for(int i = 0; i < _numero_vertices; i++) {
-        if(i == _numero_vertices)
+        if(i == _numero_vertices-1)
             std::cout << _vertices[i].get_valor() << std::endl;
         else
             std::cout << _vertices[i].get_valor() << " ";

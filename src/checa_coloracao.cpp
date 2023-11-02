@@ -15,7 +15,6 @@ void Coloracao::vizinhos(int n_cor) {
 int Coloracao::checa_condicao_vizinhos(Grafo *vertices) {
     Lista *lista = vertices->get_lista();
 
-    
     // percorre cada um dos vértices do grafo
     for(int i = 0; i < vertices->get_num_vertices(); i++) {
         // armazena a cor do vértice corrente
