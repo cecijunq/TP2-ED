@@ -19,20 +19,35 @@ int main() {
 
         for(int j = 0; j < numero_vizinhos; j++) {
             std::cin >> adjacente;
-            grafo->insere_aresta(i, adjacente);
+            try {
+                grafo->insere_aresta(i, adjacente);
+
+            } catch(entrada_invalida_e &e) {
+                return 0;
+            }
         }
     }
 
     for(int i = 0; i < numero_vertices; i++) {
         int cor_vertice;
         std::cin >> cor_vertice;
-        grafo->set_cor(i, cor_vertice);
+        try {
+            grafo->set_cor(i, cor_vertice);
+
+        } catch(entrada_invalida_e &e) {
+            return 0;
+        }
         if(cor_vertice > max) max = cor_vertice;
     }
 
     Sort s(grafo);
     Coloracao c;
     int resultado_coloracao = c.checa_condicao_vizinhos(grafo);
+
+    if(resultado_coloracao == 0) {
+        std::cout << "0" << std::endl;
+        return 0;
+    }
 
     switch(metodo_ordenacao) {
         case 'b': {
@@ -75,14 +90,21 @@ int main() {
             s.counting_sort(max);
             break;
         }
+
+        default: {
+            return 1;
+        }
     }
 
-    if(resultado_coloracao == 0) {
+    std::cout << "1 ";
+    grafo->imprime_vizinhos();
+    return 0;
+    /*if(resultado_coloracao == 0) {
         std::cout << "0" << std::endl;
     } else {
         std::cout << "1 ";
         grafo->imprime_vizinhos();
-    }
+    }*/
 
     //grafo.Limpa();
 

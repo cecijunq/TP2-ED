@@ -139,6 +139,20 @@ void Sort::mergesort(int elem_esq, int elem_dir) {
 }
 
 void Sort::heapify(int no) {
+    /*Lista *lista = _grafo->get_lista();
+    int no_pai = no;
+    int ramo_esq = 2 * no_pai;
+    Lista cor_no_pai = lista[no_pai];
+    while(ramo_esq <= _grafo->get_num_vertices()-1) {
+        if(ramo_esq < _grafo->get_num_vertices()-1) {
+            if(lista[ramo_esq].get_cor() > lista[ramo_esq+1].get_cor()) ramo_esq = ramo_esq + 1;
+            if(cor_no_pai.get_cor() <= lista[ramo_esq].get_cor()) break;
+            lista[no_pai] = lista[ramo_esq];
+            no_pai = ramo_esq;
+            ramo_esq = 2 * no_pai;
+        }
+        lista[no_pai] = cor_no_pai;
+    }*/
     Lista *lista = _grafo->get_lista();
     int menor_elem = no;
 
@@ -158,7 +172,7 @@ void Sort::heapify(int no) {
     if(menor_elem != no) {
         Troca(no, menor_elem);
 
-        /*if(lista[menor_elem].get_cor() == lista[menor_elem - 1].get_cor() && lista[menor_elem].get_valor() < lista[menor_elem - 1].get_valor()) {
+        if(lista[menor_elem].get_cor() == lista[menor_elem - 1].get_cor() && lista[menor_elem].get_valor() < lista[menor_elem - 1].get_valor()) {
             Troca(menor_elem, menor_elem - 1);
         }
         
@@ -172,22 +186,45 @@ void Sort::heapify(int no) {
         
         if(lista[no].get_cor() == lista[no + 1].get_cor() && lista[no].get_valor() > lista[no + 1].get_valor()) {
             Troca(no, no + 1);
-        }*/
+        }
         heapify(menor_elem);
     }
 
-    /*if(condicao1 && condicao2 && lista[index_ramo_esq].get_cor() > lista[index_ramo_dir].get_cor()) {
+    if(condicao1 && condicao2 && lista[index_ramo_esq].get_cor() > lista[index_ramo_dir].get_cor()) {
         Troca(index_ramo_esq, index_ramo_dir);
-    }*/
+    }
 }
 
 void Sort::heapsort() {
+    Lista *lista = _grafo->get_lista();
     int n_vertices = _grafo->get_num_vertices();
+    //Lista *aux = new Lista[n_vertices];
+    //int i = 0;
 
-    for(int i = n_vertices/2 - 1; i >= 0; i--) {
+    // constroi o heap
+    /*int no_interno = n_vertices/2 + 1;
+    while(no_interno > 0) {
+        no_interno--;
+        heapify(no_interno);
+    }
+    while(n_vertices > 0) {
+        Lista primeiro_elem = lista[0];
+        lista[0] = lista[n_vertices-1];
+        lista[n_vertices-1] = primeiro_elem;
+        n_vertices--;
+        heapify(0);
+    }*/
+    for(int i = n_vertices/2 + 1; i >= 0; i--) {
         heapify(i);
     }
-    deixa_estavel();
+    /*while(n_vertices > 0) {
+        Lista primeiro_elem = lista[0];
+        lista[0] = lista[n_vertices-1];
+        lista[n_vertices-1] = primeiro_elem;
+        n_vertices--;
+        heapify(0);
+    }*/
+    //deixa_estavel();
 }
 
 void Sort::counting_sort(int max) {
@@ -215,9 +252,10 @@ void Sort::counting_sort(int max) {
         i++;
     }
     delete []lista;
-    for(int i = 0; i < _grafo->get_num_vertices(); i++) {
+    lista = tmp;
+    /*for(int i = 0; i < _grafo->get_num_vertices(); i++) {
         lista[i] = tmp[i];
     }
-    delete []tmp;
+    delete []tmp;*/
     delete []aux;
 }
