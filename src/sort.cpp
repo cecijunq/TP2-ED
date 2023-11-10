@@ -9,7 +9,7 @@ void Sort::Troca(int item1, int item2) {
     if(item1 == item2) return ;
     Lista *lista = _grafo->get_lista();
     if(lista[item1].get_cor() == lista[item2].get_cor()) {
-        if(lista[item1].get_valor() < lista[item1].get_valor()) {
+        if(lista[item1].get_valor() < lista[item2].get_valor()) {
             return;
         }
     }
@@ -32,16 +32,27 @@ void Sort::bubble_sort() {
 
 void Sort::selection_sort() {
     Lista *lista = _grafo->get_lista();
-    int maximo;
-    for(int i = n_vertices-1; i > 0; i--) {
-        maximo = i;
+    int minimo;
+    for(int i = 0; i < n_vertices-1; i++) {
+        int i_aux = i;
+        minimo = i;
 
-        for(int j = i-1; j > 0; j--) {
-            if(lista[j].get_cor() > lista[maximo].get_cor()) {
-                maximo = j;
+        for(int j = i+1; j < n_vertices; j++) {
+            if(lista[j].get_cor() < lista[minimo].get_cor()) {
+                minimo = j;
+            } else if(lista[j].get_cor() == lista[minimo].get_cor()) {
+                if(j < minimo) {
+                    minimo = j;
+                }
             }
         }
-        Troca(maximo, i);
+        if(minimo != i) {
+            Lista tmp = lista[minimo];
+            for(int k = minimo; k > i; k--) {
+                lista[k] = lista[k-1];
+            }
+            lista[i] = tmp;
+        }
     }
 }
 
@@ -88,7 +99,7 @@ int Sort::particiona(int comeco, int fim) {
 
 void Sort::quicksort(int comeco, int fim) {
     if(comeco >= fim) return;
-    int pivot = particiona(comeco, fim);
+    int pivot = particiona(comeco, fim); // log2 n
 
     quicksort(comeco, pivot-1);
     quicksort(pivot+1, fim);
@@ -131,100 +142,61 @@ void Sort::merge(int elem_esq, int elem_dir, int mediana) {
 
 void Sort::mergesort(int elem_esq, int elem_dir) {
     if(elem_esq < elem_dir-1) {
-        int mediana = (elem_esq + elem_dir)/2;
+        int mediana = (elem_esq + elem_dir)/2; // criado log2 n vezes
         mergesort(elem_esq, mediana);
         mergesort(mediana, elem_dir);
         merge(elem_esq, elem_dir, mediana);
     }
 }
 
-void Sort::heapify(int no) {
-    /*Lista *lista = _grafo->get_lista();
-    int no_pai = no;
-    int ramo_esq = 2 * no_pai;
-    Lista cor_no_pai = lista[no_pai];
-    while(ramo_esq <= _grafo->get_num_vertices()-1) {
-        if(ramo_esq < _grafo->get_num_vertices()-1) {
-            if(lista[ramo_esq].get_cor() > lista[ramo_esq+1].get_cor()) ramo_esq = ramo_esq + 1;
-            if(cor_no_pai.get_cor() <= lista[ramo_esq].get_cor()) break;
-            lista[no_pai] = lista[ramo_esq];
-            no_pai = ramo_esq;
-            ramo_esq = 2 * no_pai;
-        }
-        lista[no_pai] = cor_no_pai;
-    }*/
+void Sort::heapify(int no, int tamanho) {
     Lista *lista = _grafo->get_lista();
     int menor_elem = no;
 
     int index_ramo_esq = 2 * no + 1;
     int index_ramo_dir = 2 * no + 2;
-    bool condicao1 = index_ramo_esq < _grafo->get_num_vertices();
-    bool condicao2 = index_ramo_dir < _grafo->get_num_vertices();
 
-    if(condicao1 && lista[index_ramo_esq].get_cor() < lista[menor_elem].get_cor()) {
-        menor_elem = index_ramo_esq;
-    }
-    
-    if(condicao2 && lista[index_ramo_dir].get_cor() < lista[menor_elem].get_cor()) {
-        menor_elem = index_ramo_dir;
+    if(index_ramo_esq < tamanho) {
+        if (lista[index_ramo_esq].get_cor() > lista[menor_elem].get_cor() || 
+            (lista[index_ramo_esq].get_cor() == lista[menor_elem].get_cor() && 
+             lista[index_ramo_esq].get_valor() > lista[menor_elem].get_valor())) {
+            menor_elem = index_ramo_esq;
+        }
     }
 
-    if(menor_elem != no) {
-        Troca(no, menor_elem);
-
-        if(lista[menor_elem].get_cor() == lista[menor_elem - 1].get_cor() && lista[menor_elem].get_valor() < lista[menor_elem - 1].get_valor()) {
-            Troca(menor_elem, menor_elem - 1);
+    if (index_ramo_dir < tamanho) {
+        // Comparação baseada nas cores dos elementos
+        if (lista[index_ramo_dir].get_cor() > lista[menor_elem].get_cor() || 
+            (lista[index_ramo_dir].get_cor() == lista[menor_elem].get_cor() && 
+             lista[index_ramo_dir].get_valor() > lista[menor_elem].get_valor())) {
+            menor_elem = index_ramo_dir;
         }
-        
-        if(lista[menor_elem].get_cor() == lista[menor_elem + 1].get_cor() && lista[menor_elem].get_valor() > lista[menor_elem + 1].get_valor()) {
-            Troca(menor_elem, menor_elem + 1);
-        }
-
-        if(lista[no].get_cor() == lista[no - 1].get_cor() && lista[no].get_valor() < lista[no - 1].get_valor()) {
-            Troca(no, no - 1);
-        }
-        
-        if(lista[no].get_cor() == lista[no + 1].get_cor() && lista[no].get_valor() > lista[no + 1].get_valor()) {
-            Troca(no, no + 1);
-        }
-        heapify(menor_elem);
     }
 
-    if(condicao1 && condicao2 && lista[index_ramo_esq].get_cor() > lista[index_ramo_dir].get_cor()) {
-        Troca(index_ramo_esq, index_ramo_dir);
+    if (menor_elem != no) {
+        Troca(menor_elem, no);
+        heapify(menor_elem, tamanho);
     }
 }
 
+/*
+    Heapsort:
+        2 inteiros (n_vertices e i)
+    Heapify:
+
+ */
 void Sort::heapsort() {
     Lista *lista = _grafo->get_lista();
     int n_vertices = _grafo->get_num_vertices();
-    //Lista *aux = new Lista[n_vertices];
-    //int i = 0;
 
-    // constroi o heap
-    /*int no_interno = n_vertices/2 + 1;
-    while(no_interno > 0) {
-        no_interno--;
-        heapify(no_interno);
+    for(int i = n_vertices/2 - 1; i >= 0; i--) {
+        heapify(i, n_vertices);
     }
-    while(n_vertices > 0) {
-        Lista primeiro_elem = lista[0];
-        lista[0] = lista[n_vertices-1];
-        lista[n_vertices-1] = primeiro_elem;
-        n_vertices--;
-        heapify(0);
-    }*/
-    for(int i = n_vertices/2 + 1; i >= 0; i--) {
-        heapify(i);
+
+    for(int i = n_vertices-1; i > 0; i--) {
+        Troca(0, i);
+        heapify(0, i);
     }
-    /*while(n_vertices > 0) {
-        Lista primeiro_elem = lista[0];
-        lista[0] = lista[n_vertices-1];
-        lista[n_vertices-1] = primeiro_elem;
-        n_vertices--;
-        heapify(0);
-    }*/
-    //deixa_estavel();
 }
 
 void Sort::counting_sort(int max) {
@@ -259,3 +231,9 @@ void Sort::counting_sort(int max) {
     delete []tmp;*/
     delete []aux;
 }
+
+/*
+    2 inteiros (index, i) --> 2
+    1 lista com o tamanho da cor máxima --> pior caso: quando a cor máxima for maior do que 
+    2 lista com o tamanho de n_vertices --> 2n
+ */

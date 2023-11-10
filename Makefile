@@ -20,8 +20,12 @@ CFLAGS = -g -pg -Wall -std=c++17 -c -I$(INC)
 
 EXE = $(BIN)/tp2.out
 
-all: $(EXE)
+all: use $(EXE)
 
+use:
+	mkdir -p bin/
+	mkdir -p obj/
+	
 $(BIN)/tp2.out: $(OBJS)
 	$(CC) -g -o $(BIN)/tp2.out $(OBJS) $(LIBS)
 

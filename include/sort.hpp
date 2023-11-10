@@ -18,7 +18,7 @@ class Sort {
         void quicksort(int comeco, int fim);
         void merge(int elem_esq, int mediana, int elem_dir);
         void mergesort(int elem_esq, int elem_dir);
-        void heapify(int no);
+        void heapify(int no, int tamanho);
         void heapsort();
         void counting_sort(int max);
         void deixa_estavel();
