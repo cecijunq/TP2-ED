@@ -11,14 +11,13 @@ Grafo::Grafo(int numero_vertices) {
         _vertices[i] = novo_vertice;
     }
 }
-
+ 
 Grafo::~Grafo() {
     Limpa();
 }
 
 void Grafo::Limpa() {
-    delete _vertices;
-
+    delete []_vertices;
 }
 
 void Grafo::insere_aresta(int v1, int v2) {

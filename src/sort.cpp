@@ -34,14 +34,13 @@ void Sort::selection_sort() {
     Lista *lista = _grafo->get_lista();
     int minimo;
     for(int i = 0; i < n_vertices-1; i++) {
-        int i_aux = i;
         minimo = i;
 
         for(int j = i+1; j < n_vertices; j++) {
             if(lista[j].get_cor() < lista[minimo].get_cor()) {
                 minimo = j;
             } else if(lista[j].get_cor() == lista[minimo].get_cor()) {
-                if(j < minimo) {
+                if(lista[j].get_valor() < lista[minimo].get_valor()) {
                     minimo = j;
                 }
             }
@@ -99,7 +98,7 @@ int Sort::particiona(int comeco, int fim) {
 
 void Sort::quicksort(int comeco, int fim) {
     if(comeco >= fim) return;
-    int pivot = particiona(comeco, fim); // log2 n
+    int pivot = particiona(comeco, fim); // n log2 n
 
     quicksort(comeco, pivot-1);
     quicksort(pivot+1, fim);
@@ -179,14 +178,7 @@ void Sort::heapify(int no, int tamanho) {
     }
 }
 
-/*
-    Heapsort:
-        2 inteiros (n_vertices e i)
-    Heapify:
-
- */
 void Sort::heapsort() {
-    Lista *lista = _grafo->get_lista();
     int n_vertices = _grafo->get_num_vertices();
 
     for(int i = n_vertices/2 - 1; i >= 0; i--) {
@@ -224,11 +216,10 @@ void Sort::counting_sort(int max) {
         i++;
     }
     delete []lista;
-    lista = tmp;
-    /*for(int i = 0; i < _grafo->get_num_vertices(); i++) {
+    for(int i = 0; i < _grafo->get_num_vertices(); i++) {
         lista[i] = tmp[i];
     }
-    delete []tmp;*/
+    delete []tmp;
     delete []aux;
 }
 

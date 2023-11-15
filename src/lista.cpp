@@ -5,7 +5,7 @@ Lista::Lista() {}
 Lista::Lista(int valor) {
     _inicio = nullptr;
     _fim = nullptr;
-    proxima_lista = nullptr;
+    //proxima_lista = nullptr;
     //anterior_lista = nullptr;
     _tamanho = 0;
     _valor_vertice = valor;
@@ -23,9 +23,9 @@ void Lista::adiciona_elemento(Celula *novo_elemento) {
     _tamanho++;
 }
 
-void Lista::set_prox_lista(Lista *proxima) {
+/*void Lista::set_prox_lista(Lista *proxima) {
     proxima_lista = proxima;
-}
+}*/
 
 int Lista::get_tamanho() {
     return _tamanho;
@@ -39,9 +39,9 @@ Celula *Lista::get_fim() {
     return _fim;
 }
 
-Lista *Lista::get_proxima_lista() {
+/*Lista *Lista::get_proxima_lista() {
     return proxima_lista;
-}
+}*/
 
 void Lista::muda_inicio(Celula *novo_inicio) {
     _inicio = novo_inicio;

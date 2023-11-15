@@ -7,7 +7,7 @@ class Lista {
     private:
         Celula *_inicio;
         Celula *_fim;
-        Lista *proxima_lista;
+        // Lista *proxima_lista;
         int _valor_vertice;
         int _cor;
         int _tamanho;
